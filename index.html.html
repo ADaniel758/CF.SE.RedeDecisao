@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sala de Estudos Compartilhado - Coordenadores do Futuro - Rede Decisão</title>
+<style>
+  :root{
+    --vermelho:#E30613; --vermelho-escuro:#B3000C; --vermelho-claro:#FDE8E9;
+    --azul:#0d47a1; --azul-claro:#e3f2fd;
+    --verde:#1b5e20; --verde-claro:#e8f5e9;
+    --laranja:#e65100; --laranja-claro:#ffe0b2;
+    --cinza:#f5f7fa; --texto:#1f2937; --borda:#d1d5db; --branco:#fff;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    color:var(--texto); background:var(--cinza); line-height:1.6;
+  }
+  
+  /* HEADER COM LOGO */
+  header.hero{
+    background:#fff; border-bottom: 4px solid var(--vermelho);
+    padding:20px;
+  }
+  .header-content{
+    max-width:1120px; margin:0 auto;
+    display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:20px;
+  }
+  .logo-container { display: flex; align-items: center; }
+  
+  /* Ajuste para o logo não distorcer */
+  .logo-img { 
+    max-height: 75px; 
+    width: auto; 
+    display: block;
+    object-fit: contain;
+  }
+  
+  .hero-text h1{ font-size:clamp(1.4rem,2.5vw,2rem); margin:0; color:var(--vermelho-escuro); line-height:1.2;}
+  .hero-text .subtitle { font-size: 1.1rem; color: #4b5563; margin-top: 4px;}
+  .hero-text .author { font-weight: 700; color: var(--vermelho); }
+
+  /* MOTIVATIONAL BANNER */
+  .motivational-banner {
+    background: var(--vermelho-claro); color: var(--vermelho-escuro);
+    text-align: center; padding: 12px 20px; font-weight: 600; font-style: italic;
+    border-bottom: 1px solid var(--borda);
+  }
+  .motivational-banner p { margin: 0; font-size: 1.05rem; }
+
+  /* NAV */
+  nav{
+    position:sticky; top:0; z-index:20; background:#fff; border-bottom:1px solid var(--borda);
+    box-shadow:0 2px 8px rgba(0,0,0,.05);
+  }
+  nav .wrap{display:flex; gap:6px; overflow-x:auto; padding:8px 12px; max-width:1120px; margin:0 auto;}
+  nav a{
+    color:var(--vermelho); text-decoration:none; font-size:.86rem; font-weight:600;
+    padding:8px 10px; border-radius:8px; white-space:nowrap;
+  }
+  nav a:hover{background:var(--vermelho-claro)}
+
+  /* MAIN CONTENT */
+  main{max-width:1120px; margin:0 auto; padding:24px 16px 60px}
+  section{
+    background:var(--branco); border:1px solid var(--borda); border-radius:14px;
+    padding:24px; margin:18px 0; box-shadow:0 4px 14px rgba(0,0,0,.03);
+  }
+  h2{color:var(--vermelho); margin:0 0 16px; font-size:1.4rem; border-bottom: 2px solid var(--vermelho-claro); padding-bottom: 8px;}
+  h3{color:var(--vermelho-escuro); margin:18px 0 8px; font-size:1.1rem}
+  h4{margin:14px 0 6px; color:var(--texto)}
+  p{margin:8px 0}
+  ul,ol{margin:8px 0 8px 22px; padding:0}
+  li{margin:6px 0}
+  .grid{display:grid; gap:16px}
+  .grid-2{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+  .grid-3{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+  
+  .card{
+    border:1px solid var(--borda); border-radius:12px; padding:16px; background:#fbfdff;
+    transition: transform 0.2s;
+  }
+  .card:hover { transform: translateY(-2px); box-shadow: 0 6px 12px rgba(0,0,0,0.05); }
+  .card h3{margin-top:0; color:var(--vermelho-escuro);}
+  
+  .callout{
+    border-left:6px solid var(--vermelho); background:var(--vermelho-claro);
+    padding:16px; border-radius:10px; margin:16px 0;
+  }
+  .callout.azul{border-left-color:var(--azul); background:var(--azul-claro)}
+  .callout.verde{border-left-color:var(--verde); background:var(--verde-claro)}
+  .callout.laranja{border-left-color:var(--laranja); background:var(--laranja-claro)}
+  
+  table{width:100%; border-collapse:collapse; margin:12px 0; font-size:.95rem}
+  th,td{border:1px solid var(--borda); padding:10px 12px; text-align:left; vertical-align:top}
+  th{background:var(--vermelho); color:#fff; font-weight:600}
+  tr:nth-child(even) td{background:#f8fafc}
+  .num{text-align:right; white-space:nowrap}
+  .total td{font-weight:700; background:#e8f5e9 !important}
+  
+  .svg-box{border:1px solid var(--borda); border-radius:12px; padding:10px; background:#fff; overflow:auto; margin-top:16px;}
+  svg{width:100%; height:auto; display:block}
+  .tag{display:inline-block; padding:4px 10px; border-radius:999px; font-size:.8rem; font-weight:700}
+  .tag.azul{background:var(--azul-claro); color:var(--azul)}
+  .tag.verde{background:var(--verde-claro); color:var(--verde)}
+  .tag.laranja{background:var(--laranja-claro); color:var(--laranja)}
+  .tag.vermelho{background:var(--vermelho-claro); color:var(--vermelho-escuro)}
+  
+  .btn{
+    display:inline-block; background:var(--vermelho); color:#fff; border:0; border-radius:10px;
+    padding:12px 20px; font-weight:700; cursor:pointer; text-decoration:none; font-size: 1rem;
+    transition: background 0.2s;
+  }
+  .btn:hover{background:var(--vermelho-escuro)}
+  .muted{color:#6b7280; font-size:.9rem}
+  
+  footer{
+    background:#1f2937; color:#cbd5e1; padding:30px 16px; margin-top:30px;
+    text-align: center;
+  }
+  footer .wrap{max-width:1120px; margin: 0 auto;}
+  
+  @media print{
+    nav,.btn,.motivational-banner{display:none!important}
+    body{background:#fff}
+    section{break-inside:avoid; box-shadow:none; border:1px solid #ccc; margin: 10px 0;}
+    header.hero{background:#fff!important; -webkit-print-color-adjust:exact; print-color-adjust:exact}
+    .card { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="header-content">
+    <div class="logo-container">
+      <!-- Aponta para o arquivo logo.jpg no mesmo diretório -->
+      <img src="logo.jpg" alt="Logo Rede Decisão" class="logo-img">
+    </div>
+    <div class="hero-text">
+      <h1>Sala de Estudos Compartilhado</h1>
+      <div class="subtitle">Coordenadores do Futuro | <span class="author">Coord. do Ensino Médio: Anderson Daniel</span></div>
+    </div>
+    <div>
+      <button class="btn" onclick="window.print()">Salvar em PDF</button>
+    </div>
+  </div>
+</header>
+
+<div class="motivational-banner">
+  <p>“Juntos aprendemos mais. Espaços que inspiram, mentes que se preparam.”</p>
+</div>
+
+<nav>
+  <div class="wrap">
+    <a href="#resumo">Resumo</a>
+    <a href="#desafio">Desafio</a>
+    <a href="#premissas">Premissas</a>
+    <a href="#descricao">Descrição</a>
+    <a href="#layout">Layout</a>
+    <a href="#mobiliario">Mobiliário</a>
+    <a href="#orcamento">Orçamento</a>
+    <a href="#logistica">Logística</a>
+    <a href="#uso">Uso por turno</a>
+    <a href="#argumentos">Argumentos</a>
+    <a href="#roteiro">Roteiro</a>
+  </div>
+</nav>
+
+<main>
+
+<section id="resumo">
+  <h2>Resumo executivo</h2>
+  <div class="grid grid-3">
+    <div class="card"><h3>Área e zonas</h3><p><strong>40 m²</strong> totais. <strong>20 m² (50%)</strong> para o EM, semi-fixo e silencioso. <strong>20 m²</strong> flexíveis para Infantil, Inclusão e circulação.</p></div>
+    <div class="card"><h3>Ensino Médio</h3><p><strong>8 carrels individuais + 4 estações de computador</strong> = 12 posições de estudo. Estante, Wi-Fi e biombos acústicos móveis.</p></div>
+    <div class="card"><h3>Verba</h3><p><strong>R$ 50.000</strong> totais: <strong>R$ 10.000</strong> em mobiliário/equipamento e <strong>R$ 40.000</strong> em infraestrutura, acústica, acessibilidade e adequações.</p></div>
+  </div>
+  <div class="callout verde">
+    <strong>Princípio central:</strong> o EM não move objetos lúdicos. O que é específico de cada segmento fica guardado em armários/carrinhos fechados com rodízio. O que é compartilhado é neutro, modular e empilhável.
+  </div>
+</section>
+
+<section id="desafio">
+  <h2>O desafio</h2>
+  <p>Transformar uma sala abandonada em uma <strong>Sala de Estudos Compartilhado</strong>, atendendo Ensino Médio, Educação Infantil, Inclusão e infraestrutura, com orçamento de <strong>R$ 50.000</strong>, sendo <strong>R$ 10.000</strong> para mobiliário e equipamento, e transições fluidas entre os usos.</p>
+
+  <div class="callout azul">
+    <strong>Ficha 2 — Coordenador(a) do Ensino Médio (1º ao 3º série)</strong><br>
+    <strong>Foco:</strong> ambiente focado, silencioso e preparatório para o vestibular.
+  </div>
+
+  <h3>Necessidades pedagógicas do EM</h3>
+  <ul>
+    <li>Pelo menos <strong>50% do espaço</strong> com áreas de estudo individual (cabines ou bancadas).</li>
+    <li>Acesso a <strong>Wi-Fi de alta velocidade</strong> e, no mínimo, <strong>4 estações de computadores</strong>.</li>
+    <li>Prateleiras para livros e apostilas de referência.</li>
+    <li><strong>Restrição crítica:</strong> uso no turno do EM exige <strong>silêncio absoluto</strong>, com isolamento visual/acústico (biombos móveis ou divisórias).</li>
+    <li><strong>Sem verba humana</strong> para ficar movendo objetos lúdicos do EF I. O ambiente do EM deve ser organizado e prático.</li>
+  </ul>
+
+  <div class="callout laranja">
+    <strong>Desafio de convencimento:</strong> mostrar ao grupo que o investimento em mesas de estudo e tecnologia é a principal prioridade, mesmo que custe mais caro, porque sem isso o EM não consegue usar o espaço com foco.
+  </div>
+</section>
+
+<section id="premissas">
+  <h2>Premissas de projeto</h2>
+  <div class="grid grid-2">
+    <div class="card"><h3>Critérios de decisão</h3><ol><li>Impacto na aprendizagem e no vestibular.</li><li>Segurança e acessibilidade.</li><li>Custo-benefício e flexibilidade.</li><li>Coexistência por zonas e horários.</li><li>Inclusão como direito, não como apêndice.</li></ol></div>
+    <div class="card"><h3>Regras de convivência</h3><ul><li>O EM usa a metade semi-fixa com biombos fechados.</li><li>O Infantil usa a metade flexível no turno alternado.</li><li>A Inclusão usa nicho acústico por agendamento.</li><li>Materiais específicos ficam em armários/carrinhos fechados.</li><li>Transição em até 10 minutos, sem o EM mover lúdicos.</li></ul></div>
+  </div>
+</section>
+
+<section id="descricao">
+  <h2>Descrição da sala e zonas</h2>
+  <p>Sala de <strong>40 m² (8 m x 5 m)</strong>, dividida em zonas com regras claras. O EM ocupa 50% da área, ao fundo, isolado por biombos acústicos móveis. A frente é flexível para Educação Infantil e Inclusão.</p>
+  <div class="grid grid-2">
+    <div class="card"><h3><span class="tag azul">Zona EM</span> 20 m²</h3><ul><li>8 carrels individuais compactos (60 x 70 cm).</li><li>4 estações de computador em bancada contínua.</li><li>Estante de parede para livros e apostilas.</li><li>Wi-Fi de alta velocidade e pontos de energia.</li><li>Biombos acústicos móveis para silêncio absoluto.</li></ul></div>
+    <div class="card"><h3><span class="tag verde">Zona Flexível</span> 20 m²</h3><ul><li>Mesas modulares com rodízio e cadeiras empilháveis.</li><li>Armário e carrinho fechados com rodízio para materiais do Infantil.</li><li>Nicho de Inclusão (~5 m²) com mesa ajustável e apoio acústico.</li><li>Circulação acessível de ~1,0 m.</li><li>Layout reorganizável em poucos minutos.</li></ul></div>
+  </div>
+</section>
+
+<section id="layout">
+  <h2>Layout esquemático — 40 m²</h2>
+  <p class="muted">Desenho vetorial simplificado, não está em escala. Azul = EM semi-fixo; verde = flexível/Infantil; laranja = inclusão; linha vermelha tracejada = biombo acústico móvel.</p>
+  <div class="svg-box">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 560" font-family="Arial, sans-serif" role="img" aria-label="Layout de sala de 40 metros quadrados com zona do Ensino Médio, zona flexível e inclusão">
+      <rect width="800" height="560" fill="#ffffff"/>
+      <text x="400" y="30" text-anchor="middle" font-size="20" font-weight="bold" fill="#1f2937">Layout — Sala Compartilhada 40 m² (8 m x 5 m)</text>
+
+      <rect x="60" y="60" width="640" height="400" fill="#fafafa" stroke="#333" stroke-width="3"/>
+
+      <!-- ZONA EM -->
+      <rect x="60" y="60" width="320" height="400" fill="#e3f2fd" stroke="#1565c0" stroke-width="2"/>
+      <text x="220" y="85" text-anchor="middle" font-size="16" font-weight="bold" fill="#0d47a1">ZONA EM — 20 m²</text>
+      <text x="220" y="105" text-anchor="middle" font-size="12" fill="#0d47a1">Silêncio absoluto / 50% da sala</text>
+
+      <g fill="#90caf9" stroke="#0d47a1" stroke-width="1">
+        <rect x="90" y="130" width="70" height="45"/><rect x="180" y="130" width="70" height="45"/>
+        <rect x="90" y="190" width="70" height="45"/><rect x="180" y="190" width="70" height="45"/>
+        <rect x="90" y="250" width="70" height="45"/><rect x="180" y="250" width="70" height="45"/>
+        <rect x="90" y="310" width="70" height="45"/><rect x="180" y="310" width="70" height="45"/>
+      </g>
+      <text x="170" y="280" text-anchor="middle" font-size="12" fill="#0d47a1">8 carrels individuais</text>
+
+      <g fill="#bbdefb" stroke="#0d47a1" stroke-width="1">
+        <rect x="290" y="130" width="60" height="40"/><rect x="290" y="185" width="60" height="40"/>
+        <rect x="290" y="240" width="60" height="40"/><rect x="290" y="295" width="60" height="40"/>
+      </g>
+      <text x="320" y="365" text-anchor="middle" font-size="12" fill="#0d47a1">4 estações PC</text>
+
+      <rect x="90" y="380" width="250" height="25" fill="#c5cae9" stroke="#3949ab"/>
+      <text x="215" y="397" text-anchor="middle" font-size="11" fill="#1a237e">Estante livros/apostilas</text>
+
+      <line x1="380" y1="60" x2="380" y2="460" stroke="#d32f2f" stroke-width="5" stroke-dasharray="10 6"/>
+      <text x="392" y="250" font-size="12" fill="#b71c1c" transform="rotate(90 392,250)">BIOMBO ACÚSTICO MÓVEL</text>
+
+      <!-- ZONA FLEXÍVEL -->
+      <rect x="380" y="60" width="320" height="400" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+      <text x="540" y="85" text-anchor="middle" font-size="16" font-weight="bold" fill="#1b5e20">ZONA FLEXÍVEL — 20 m²</text>
+      <text x="540" y="105" text-anchor="middle" font-size="12" fill="#1b5e20">Infantil / compartilhado</text>
+
+      <g fill="#a5d6a7" stroke="#1b5e20" stroke-width="1">
+        <rect x="410" y="130" width="80" height="45"/><rect x="510" y="130" width="80" height="45"/>
+        <rect x="410" y="190" width="80" height="45"/><rect x="510" y="190" width="80" height="45"/>
+      </g>
+      <text x="500" y="260" text-anchor="middle" font-size="12" fill="#1b5e20">Mesas modulares com rodízio</text>
+
+      <rect x="410" y="290" width="90" height="45" fill="#c8e6c9" stroke="#1b5e20"/>
+      <text x="455" y="317" text-anchor="middle" font-size="10" fill="#1b5e20">Armário fechado</text>
+      <rect x="510" y="290" width="90" height="45" fill="#c8e6c9" stroke="#1b5e20"/>
+      <text x="555" y="317" text-anchor="middle" font-size="10" fill="#1b5e20">Carrinho fechado</text>
+
+      <rect x="580" y="350" width="100" height="80" fill="#ffe0b2" stroke="#ef6c00" stroke-width="2"/>
+      <text x="630" y="370" text-anchor="middle" font-size="12" font-weight="bold" fill="#e65100">INCLUSÃO</text>
+      <text x="630" y="388" text-anchor="middle" font-size="10" fill="#e65100">~5 m²</text>
+      <text x="630" y="404" text-anchor="middle" font-size="9" fill="#e65100">Mesa ajustável</text>
+      <text x="630" y="418" text-anchor="middle" font-size="9" fill="#e65100">Apoio acústico</text>
+
+      <rect x="340" y="450" width="80" height="10" fill="#333"/>
+      <text x="380" y="480" text-anchor="middle" font-size="12" fill="#1f2937">ENTRADA</text>
+      <text x="380" y="495" text-anchor="middle" font-size="10" fill="#555">Circulação acessível ~1,0 m</text>
+
+      <text x="60" y="525" font-size="11" fill="#444">Legenda: azul = EM semi-fixo; verde = flexível/Infantil; laranja = inclusão; vermelho tracejado = biombo acústico móvel.</text>
+    </svg>
+  </div>
+</section>
+
+<section id="mobiliario">
+  <h2>Mobiliário fluido</h2>
+  <p><strong>Definição:</strong> mobiliário fluido é um conjunto de móveis neutros, modulares, empilháveis e com rodízio, que permitem mudar o layout em poucos minutos. Cada segmento guarda seus materiais específicos em armários/carrinhos fechados. O setor do EM fica semi-fixo com estudo individual, computadores e isolamento acústico/visual.</p>
+
+  <table>
+    <thead><tr><th>Item</th><th>Qtd.</th><th>Função na fluidez</th></tr></thead>
+    <tbody>
+      <tr><td>Mesas modulares com rodízio e trava</td><td>6</td><td>Formam bancadas ou ilhas; mudam de layout rápido.</td></tr>
+      <tr><td>Cadeiras empilháveis e leves</td><td>12</td><td>Permitem esvaziar e reorganizar por turno.</td></tr>
+      <tr><td>Bancadas/carrels individuais com divisória</td><td>8</td><td>Garantem 50% de estudo individual do EM.</td></tr>
+      <tr><td>Biombos móveis com painel acústico</td><td>2</td><td>Criam silêncio absoluto e isolamento visual do EM.</td></tr>
+      <tr><td>Armários/carrinhos fechados com rodízio</td><td>2</td><td>Guardam materiais do Infantil e da Inclusão sem ficar soltos.</td></tr>
+      <tr><td>Estante modular</td><td>1</td><td>Livros e apostilas de referência do EM.</td></tr>
+      <tr><td>Mesa acessível de altura ajustável</td><td>1</td><td>Atendimento inclusivo e necessidades específicas.</td></tr>
+      <tr><td>Estações de computador recondicionadas + periféricos</td><td>4</td><td>Requisito do EM e apoio à pesquisa.</td></tr>
+      <tr><td>Pontos de energia e Wi-Fi</td><td>—</td><td>Infraestrutura; entra nos R$ 40 mil.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout">
+    <strong>Transição fluida:</strong> o que é específico de cada segmento não fica solto; fica em carrinho/armário fechado identificado. O que é compartilhado é neutro. O EM não precisa mover objetos lúdicos: usa a metade semi-fixa e os biombos. O Infantil e a Inclusão usam a metade flexível.
+  </div>
+</section>
+
+<section id="orcamento">
+  <h2>Orçamento</h2>
+  <p><strong>Verba total: R$ 50.000</strong> — <strong>R$ 10.000</strong> para mobiliário e equipamento; <strong>R$ 40.000</strong> para infraestrutura e adequações. Valores estimados para planejamento, sujeitos a cotação formal.</p>
+
+  <h3>Mobiliário e equipamento — R$ 10.000</h3>
+  <table>
+    <thead><tr><th>Item</th><th class="num">Valor estimado</th></tr></thead>
+    <tbody>
+      <tr><td>4 computadores recondicionados + periféricos</td><td class="num">R$ 3.000</td></tr>
+      <tr><td>6 mesas modulares com rodízio</td><td class="num">R$ 2.400</td></tr>
+      <tr><td>12 cadeiras empilháveis</td><td class="num">R$ 1.000</td></tr>
+      <tr><td>2 biombos acústicos móveis</td><td class="num">R$ 1.200</td></tr>
+      <tr><td>2 armários/carrinhos fechados com rodízio</td><td class="num">R$ 900</td></tr>
+      <tr><td>1 estante modular</td><td class="num">R$ 400</td></tr>
+      <tr><td>1 mesa acessível ajustável</td><td class="num">R$ 500</td></tr>
+      <tr><td>Reserva/frete</td><td class="num">R$ 600</td></tr>
+      <tr class="total"><td>Total</td><td class="num">R$ 10.000</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Infraestrutura e adequações — R$ 40.000</h3>
+  <table>
+    <thead><tr><th>Item</th><th class="num">Valor estimado</th></tr></thead>
+    <tbody>
+      <tr><td>Elétrica, rede, Wi-Fi e pontos de energia</td><td class="num">R$ 12.000</td></tr>
+      <tr><td>Tratamento acústico e divisórias</td><td class="num">R$ 10.000</td></tr>
+      <tr><td>Acessibilidade, piso e circulação</td><td class="num">R$ 6.000</td></tr>
+      <tr><td>Iluminação, sinalização e pintura</td><td class="num">R$ 5.000</td></tr>
+      <tr><td>Adequações de inclusão</td><td class="num">R$ 4.000</td></tr>
+      <tr><td>Reserva técnica</td><td class="num">R$ 3.000</td></tr>
+      <tr class="total"><td>Total</td><td class="num">R$ 40.000</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout laranja">
+    <strong>Se os R$ 10 mil forem teto rígido:</strong> priorizar 4 PCs, bancadas modulares e armários com rodízio. O restante vai para infraestrutura, acústica e inclusão. Se faltar, fazer fase 2 com parcerias ou doações.
+  </div>
+</section>
+
+<section id="logistica">
+  <h2>Logística e transições</h2>
+  <div class="grid grid-2">
+    <div class="card">
+      <h3>Antes do uso</h3>
+      <ul>
+        <li>Agendamento por turno e por segmento.</li>
+        <li>Sinalização das zonas e regras de uso.</li>
+        <li>Teste de Wi-Fi, energia e equipamentos.</li>
+        <li>Checklist de abertura e fechamento.</li>
+        <li>Responsável definido por turno.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Durante o uso</h3>
+      <ul>
+        <li>EM com biombos fechados e silêncio absoluto.</li>
+        <li>Infantil na metade flexível, com materiais dos armários.</li>
+        <li>Inclusão no nicho acústico, por agendamento.</li>
+        <li>Circulação acessível livre.</li>
+        <li>Registro de ocorrências e manutenção.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Transição</h3>
+      <ul>
+        <li>Até 10 minutos entre usos.</li>
+        <li>Materiais específicos voltam aos armários fechados.</li>
+        <li>Mesas modulares e cadeiras empilháveis reorganizadas.</li>
+        <li>Biombos conferidos e travados.</li>
+        <li>O EM não move objetos lúdicos.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Depois do uso</h3>
+      <ul>
+        <li>Conferência de equipamentos e limpeza.</li>
+        <li>Registro de danos e reposição.</li>
+        <li>Avaliação periódica com professores e alunos.</li>
+        <li>Ajustes no layout e nos horários.</li>
+        <li>Prestação de contas da verba.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="uso">
+  <h2>Uso por turno</h2>
+  <table>
+    <thead><tr><th>Turno/uso</th><th>Zona principal</th><th>Regras</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Manhã — EM</strong></td><td>Zona EM (20 m²)</td><td>Biombos fechados, silêncio absoluto, 8 carrels + 4 PCs, estante e Wi-Fi.</td></tr>
+      <tr><td><strong>Tarde — Infantil</strong></td><td>Zona flexível (20 m²)</td><td>Mesas modulares, materiais saem dos armários fechados, cadeiras empilháveis.</td></tr>
+      <tr><td><strong>Contraturno — Inclusão</strong></td><td>Nicho de inclusão (~5 m²)</td><td>Agendamento, mesa ajustável, apoio acústico e materiais específicos.</td></tr>
+      <tr><td><strong>Transição</strong></td><td>Todas as zonas</td><td>Até 10 min, guardar específicos, conferir biombos, reorganizar layout.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="argumentos">
+  <h2>Argumentos de negociação</h2>
+  <ul>
+    <li>“Não estou pedindo o espaço inteiro: estou pedindo os <strong>50% semi-fixos</strong> que o EM exige.”</li>
+    <li>“Biombo acústico e armário fechado não são luxo: são o que evita conflito entre usos.”</li>
+    <li>“Mobiliário neutro e empilhável é mais barato do que reformar depois.”</li>
+    <li>“Sem mesas e tecnologia, o EM não usa; o investimento se perde.”</li>
+    <li>“Se apertar, reduzimos acabamento e quantidade de cadeiras, mas não a infraestrutura de foco.”</li>
+    <li>“O mobiliário fluido não é trazer o lúdico para o EM. É criar base neutra compartilhada e guardar o específico em armários fechados.”</li>
+  </ul>
+</section>
+
+<section id="roteiro">
+  <h2>Roteiro de apresentação — 2 minutos</h2>
+  <div class="callout verde">
+    <p>“Este é o layout de 40 m². Metade da sala, 20 m², fica semi-fixa para o EM, com 8 carrels, 4 computadores, estante e biombo acústico. A outra metade é flexível para Infantil e Inclusão, com mesas modulares, armários fechados com rodízio e um nicho acústico de inclusão.</p>
+    <p>O mobiliário fluido não é trazer o lúdico para o EM: é criar uma base neutra compartilhada e guardar o específico em armários fechados. Assim, a transição é rápida, o EM não move objetos lúdicos e todos usam o espaço com regras claras.</p>
+    <p>Os R$ 10 mil de mobiliário priorizam mesas, estações e isolamento, porque sem isso o EM não consegue usar o espaço. O restante do orçamento vai para infraestrutura, que beneficia todos. Se o orçamento apertar, reduzimos acabamento e quantidade de cadeiras, mas não a infraestrutura de foco.”</p>
+  </div>
+</section>
+
+<section>
+  <h2>Checklist final</h2>
+  <div class="grid grid-2">
+    <div class="card"><h3>Pedagógico</h3><ul><li>50% do espaço em estudo individual para o EM.</li><li>4 estações de computador e Wi-Fi.</li><li>Estante de livros/apostilas.</li><li>Nicho de inclusão com mesa ajustável.</li><li>Área flexível para Educação Infantil.</li></ul></div>
+    <div class="card"><h3>Logístico</h3><ul><li>Biombos acústicos móveis.</li><li>Armários/carrinhos fechados com rodízio.</li><li>Circulação acessível ~1,0 m.</li><li>Transição em até 10 minutos.</li><li>O EM não move objetos lúdicos.</li></ul></div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p style="font-size:1.1rem; font-weight:700; color:#fff; margin-bottom:8px;">Rede Decisão | Juntos aprendemos mais</p>
+    <p><strong>Coordenador do Ensino Médio: Anderson Daniel</strong></p>
+    <p class="muted" style="color:#94a3b8; font-size:0.85rem; margin-top:10px;">Documento de apoio à dinâmica remota. Valores estimados para planejamento, sujeitos a cotação formal. Layout esquemático, não está em escala.</p>
+  </div>
+</footer>
+
+</body>
+</html>
